@@ -643,16 +643,15 @@ class Renderer:
         if 'edge_color' in kw:
             edge_color_str = kw['edge_color']
 
-        edge_width = 1.0
-        if not self.draw_edges:
-            edge_width = 0.0
-
-        line_material = pjs.LineBasicMaterial(color=edge_color_str, transparent=True, opacity=0.3, linewidth=edge_width)
-        my_object_wireframe_mesh = pjs.LineSegments(
-            geometry=obj_geometry,
-            material=line_material,
-            position=[0, 0, 0], 
-        )
+        if self.draw_edges:
+            line_material = pjs.LineBasicMaterial(color=edge_color_str, transparent=True, opacity=0.3, linewidth=1.0)
+            my_object_wireframe_mesh = pjs.LineSegments(
+                geometry=obj_geometry,
+                material=line_material,
+                position=[0, 0, 0], 
+            )
+        else:
+            my_object_wireframe_mesh = None
 
         n_vert = vertices.shape[0]
         center = vertices.mean(axis=0)
@@ -683,6 +682,8 @@ class Renderer:
         
         scene_things = [my_object_mesh, my_object_wireframe_mesh, select_point_mesh, arrow_cyl_mesh, arrow_head_mesh,
                         camera, pjs.AmbientLight(color='#888888')]
+
+        scene_things = [thing for thing in scene_things if thing is not None]
         
         if self.draw_grids:
             grids, space = self._get_grids(vertices)
