@@ -198,6 +198,7 @@ class Renderer:
         self.height = kw.get('height', 600)
         self.draw_grids = kw.get('draw_grids', True)
         self.grid_lines_width = kw.get('grid_lines_width', 1)
+        self.draw_edges = kw.get('draw_edges', True)
 
     def _try_executable(self, executable_path):
         if os.path.isfile(executable_path):
@@ -638,11 +639,15 @@ class Renderer:
             position=[0, 0, 0],   
         )
         
-        line_color_str = '#ffffff'
+        edge_color_str = '#ffffff'
         if 'edge_color' in kw:
-            line_color_str = kw['edge_color']
+            edge_color_str = kw['edge_color']
 
-        line_material = pjs.LineBasicMaterial(color='#ffffff', transparent=True, opacity=0.3, linewidth=1.0)
+        edge_width = 1.0
+        if not self.draw_edges:
+            edge_width = 0.0
+
+        line_material = pjs.LineBasicMaterial(color=edge_color_str, transparent=True, opacity=0.3, linewidth=edge_width)
         my_object_wireframe_mesh = pjs.LineSegments(
             geometry=obj_geometry,
             material=line_material,
