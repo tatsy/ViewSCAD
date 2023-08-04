@@ -638,6 +638,10 @@ class Renderer:
             position=[0, 0, 0],   
         )
         
+        line_color_str = '#ffffff'
+        if 'edge_color' in kw:
+            line_color_str = kw['edge_color']
+
         line_material = pjs.LineBasicMaterial(color='#ffffff', transparent=True, opacity=0.3, linewidth=1.0)
         my_object_wireframe_mesh = pjs.LineSegments(
             geometry=obj_geometry,
